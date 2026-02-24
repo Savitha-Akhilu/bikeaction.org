@@ -100,7 +100,6 @@ def redact_image(image_file, plate_recognizer_response):
 
 def submit_violation_report_to_ppa(violation_report):
     """Submit a violation report to PPA via Power Automate API."""
-    violation_report.screenshot_error.delete()
 
     if not settings.DEBUG:
         domain = settings.PPA_API_DOMAIN
