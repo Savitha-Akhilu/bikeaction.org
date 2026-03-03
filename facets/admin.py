@@ -9,6 +9,7 @@ from django.urls import path, reverse
 
 from facets.forms import COLUMN_CHOICES, CSVColumnSelectForm
 from facets.models import (
+    CongressionalDistrict,
     District,
     Division,
     RegisteredCommunityOrganization,
@@ -196,6 +197,11 @@ class StateSenateDistrictAdmin(FacetAdmin):
     search_fields = ["name"]
 
 
+class CongressionalDistrictAdmin(FacetAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+
+
 class WardAdmin(FacetAdmin):
     ordering = (Length("name"), "name")
     list_display = ["name"]
@@ -214,6 +220,7 @@ admin.site.register(RegisteredCommunityOrganization, RegisteredCommunityOrganiza
 admin.site.register(ZipCode, ZipCodeAdmin)
 admin.site.register(StateHouseDistrict, StateHouseDistrictAdmin)
 admin.site.register(StateSenateDistrict, StateSenateDistrictAdmin)
+admin.site.register(CongressionalDistrict, CongressionalDistrictAdmin)
 admin.site.register(Ward, WardAdmin)
 admin.site.register(Division, DivisionAdmin)
 organizer_admin.register(District, DistrictAdmin)
