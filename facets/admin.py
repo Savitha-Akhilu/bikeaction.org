@@ -46,14 +46,30 @@ def _build_profiles_queryset(facets):
     return Profile.objects.filter(q).distinct().select_related("user")
 
 
-def _build_csv_response(profiles, selected_columns):
+def _build_facet_mapping(profiles, facets):
+    mapping = {profile.pk: [] for profile in profiles}
+    for facet in facets:
+        for profile in profiles:
+            if profile.location and facet.mpoly.contains(profile.location):
+                mapping[profile.pk].append(facet.name)
+    return mapping
+
+
+def _build_csv_response(profiles, selected_columns, facets=None, facet_label="Facet"):
     column_labels = dict(COLUMN_CHOICES)
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = 'attachment; filename="profiles_export.csv"'
     writer = csv.writer(response)
-    writer.writerow([column_labels[col] for col in selected_columns])
+    headers = [column_labels[col] for col in selected_columns]
+    if facets is not None:
+        headers.append(facet_label)
+        facet_mapping = _build_facet_mapping(profiles, facets)
+    writer.writerow(headers)
     for profile in profiles:
-        writer.writerow([COLUMN_ACCESSORS[col](profile) for col in selected_columns])
+        row = [COLUMN_ACCESSORS[col](profile) for col in selected_columns]
+        if facets is not None:
+            row.append(", ".join(facet_mapping.get(profile.pk, [])))
+        writer.writerow(row)
     return response
 
 
@@ -99,7 +115,12 @@ class FacetAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
             form = CSVColumnSelectForm(request.POST)
             if form.is_valid():
                 profiles = _build_profiles_queryset([facet])
-                return _build_csv_response(profiles, form.cleaned_data["columns"])
+                return _build_csv_response(
+                    profiles,
+                    form.cleaned_data["columns"],
+                    facets=[facet],
+                    facet_label=opts.verbose_name.title(),
+                )
 
         profile_count = _build_profiles_queryset([facet]).count()
         changelist_url = reverse(f"admin:{opts.app_label}_{opts.model_name}_changelist")
@@ -128,14 +149,19 @@ class FacetAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
 
     @admin.action(description="Export contained profiles as CSV")
     def export_profiles_csv(self, request, queryset):
+        opts = self.model._meta
         if "confirm" in request.POST:
             form = CSVColumnSelectForm(request.POST)
             if form.is_valid():
                 profiles = _build_profiles_queryset(queryset)
-                return _build_csv_response(profiles, form.cleaned_data["columns"])
+                return _build_csv_response(
+                    profiles,
+                    form.cleaned_data["columns"],
+                    facets=list(queryset),
+                    facet_label=opts.verbose_name.title(),
+                )
 
         profile_count = _build_profiles_queryset(queryset).count()
-        opts = self.model._meta
         changelist_url = reverse(f"admin:{opts.app_label}_{opts.model_name}_changelist")
 
         context = {
