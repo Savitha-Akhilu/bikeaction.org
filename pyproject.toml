@@ -71,6 +71,7 @@ deploy = [
     "uvicorn>=0.27.0",
 ]
 dev = [
+    "django-debug-toolbar",
     "hupper>=1.12.1",
     "jurigged>=0.5.7",
     "ruff>=0.15.0",
