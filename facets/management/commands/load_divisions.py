@@ -35,7 +35,11 @@ class Command(BaseCommand):
         if dry_run:
             self.stdout.write(self.style.WARNING("DRY RUN - no changes will be made"))
 
-        wards = {int(w.properties.get("ward_num")): w for w in Ward.objects.all()}
+        wards = {}
+        for w in Ward.objects.all():
+            ward_num = w.properties.get("ward_num") or w.properties.get("ward_number")
+            if ward_num is not None:
+                wards[int(ward_num)] = w
         if not wards and not dry_run:
             self.stdout.write(self.style.ERROR("No Wards found. Run load_wards first."))
             return
