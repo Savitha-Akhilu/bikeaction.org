@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+
 import { BannerService } from '../../services/banner.service';
 
 @Component({
@@ -7,10 +7,11 @@ import { BannerService } from '../../services/banner.service';
   templateUrl: 'banner.component.html',
   styleUrls: ['banner.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
 })
 export class BannerComponent implements OnInit {
-  constructor(public bannerService: BannerService) {}
+  bannerService = inject(BannerService);
+
 
   ngOnInit() {
     this.bannerService.fetchBanner();
