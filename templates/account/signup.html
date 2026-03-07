@@ -1,18 +1,28 @@
 {% extends "account/base_entrance.html" %}
 {% load allauth i18n %}
 {% load allauth account %}
+
 {% block head_title %}
-    {% trans "Sign Up" %}
+    {% trans "Account Sign Up" %}
 {% endblock head_title %}
+
 {% block content %}
 <div class="form-header">
     {% element h1 %}
-        {% trans "Sign Up" %}
+        {% trans "Account Sign Up" %}
     {% endelement %}
+
+    <p>
+        Want to support safer streets for biking in Philly? Creating a PBA account lets us notify you about important calls-to-action in your area like petitions, surveys, local elections, and community meetings where you can support new bike lanes.
+        <br>
+        <em>Emails are low-frequency and always actionable!</em>
+    </p>
+
     <p>
         {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
     </p>
 </div>
+
 <div class="form-container">
     {% url 'account_signup' as action_url %}
     {% element form form=form method="post" action=action_url tags="entrance,signup" %}
@@ -34,11 +44,6 @@
             </div>
         {% endslot %}
     {% endelement %}
-    {% comment %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-    {% endcomment %}
 </div>
 <br>
 <br>
