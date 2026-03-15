@@ -12,11 +12,18 @@
         {% trans "Account Sign Up" %}
     {% endelement %}
 
-    <p>
-        Want to support safer streets for biking in Philly? Creating a PBA account lets us notify you about important calls-to-action in your area like petitions, surveys, local elections, and community meetings where you can support new bike lanes.
-        <br>
-        <em>Emails are low-frequency and always actionable!</em>
-    </p>
+    <details class="collapsible-heading-marker">
+        <summary style="justify-content: center; font-size: larger;">
+            <i class="fa-solid fa-angle-right collapsible-heading-icon"></i>
+            Learn more about PBA Accounts
+        </summary>
+        <p style="width: 75%; margin: auto; padding-top: .5em;">
+            Creating a PBA account lets us notify you about important calls-to-action in your area like petitions, surveys, local elections, and community meetings where you can support new bike lanes.
+            <br>
+            <br>
+            <em>Emails are low-frequency and always actionable!</em>
+        </p>
+    </details>
 
     <p>
         {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}

@@ -34,6 +34,14 @@ blockquote {
   margin-inline-end: .5em;
 }
 
+summary {
+  cursor: pointer;
+}
+
+summary:hover {
+  background: #e9ecef;
+}
+
 .wrapper {
   display: grid;
   min-height: 100%;
@@ -1754,7 +1762,6 @@ body {
 
 .tag-filter-dropdown summary {
   padding: 0.5rem 1rem;
-  cursor: pointer;
   user-select: none;
   font-size: 0.95rem;
   color: #495057;
